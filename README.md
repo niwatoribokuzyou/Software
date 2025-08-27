@@ -1,6 +1,16 @@
-文字起こし whisper_test.py
-キャプション effb2_test.py
-LLM ollama_test.py
+文字起こし 
+
+whisper_test.py
+
+キャプション 
+
+effb2_test.py
+
+LLM 
+
+ollama_test.py
+
+
 sunoAPIとgptはまだうごかない
 
 
