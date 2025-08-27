@@ -1,5 +1,6 @@
 *
 !*.py
+!*.txt
 !voice.wav
 !answer_data/**
 asano.wav
