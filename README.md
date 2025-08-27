@@ -1,3 +1,7 @@
+
+pip install -r requirements.txt
+version.docxにpip listしたやつのっけてる
+
 文字起こし 
 
 whisper_test.py
