@@ -21,18 +21,17 @@ import torchaudio
 
 
 
-def generate_audio_caption(audio_bytes, output_path,wav_path,  model_name="wsntxxn/effb2-trm-audio-captioning",
-                           tokenizer_name="wsntxxn/audiocaps-simple-tokenizer"):
+def generate_audio_caption(audio_bytes, model_name="wsntxxn/effb2-trm-audio-captioning", tokenizer_name="wsntxxn/audiocaps-simple-tokenizer") -> str:
     """
     音声ファイルからキャプションを生成してファイルに保存する関数
 
     Args:
-        wav_path (str): 入力音声ファイルのパス
         output_path (str): キャプションを保存するテキストファイルのパス
         model_name (str): HuggingFaceモデル名
         tokenizer_name (str): HuggingFaceトークナイザ名
     """
-    with open(wav_path, "wb") as f:
+    input_path = "/answer_data/input_caption.wav"
+    with open(input_path, "wb") as f:
         f.write(audio_bytes)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -41,7 +40,7 @@ def generate_audio_caption(audio_bytes, output_path,wav_path,  model_name="wsntx
     tokenizer = PreTrainedTokenizerFast.from_pretrained(tokenizer_name)
 
     # 音声読み込み
-    wav, sr = torchaudio.load(wav_path)
+    wav, sr = torchaudio.load(input_path)
     wav = torchaudio.functional.resample(wav, sr, model.config.sample_rate)
     if wav.size(0) > 1:
         wav = wav.mean(0).unsqueeze(0)
@@ -53,19 +52,12 @@ def generate_audio_caption(audio_bytes, output_path,wav_path,  model_name="wsntx
     caption = tokenizer.decode(word_idxs[0], skip_special_tokens=True)
     print("Caption:", caption)
 
-    # ディレクトリがなければ作成
-
-    # ファイルに書き込み
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(caption)
-
     return caption
 
 
 
 if __name__ == "__main__":
-    wav_path = "asano.wav"
     with open("asano.wav", "rb") as f:
         audio_bytes = f.read()
     
-    generate_audio_caption(audio_bytes, "./answer_data/output_caption.txt", wav_path)
+    generate_audio_caption(audio_bytes)

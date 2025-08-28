@@ -1,40 +1,33 @@
 
 import whisper
-import os
 
-def transcribe_audio(audio_bytes, wav_path, output_path, model_name="base"):
+def transcribe_audio(audio_bytes, model_name="base"):
     """
     音声ファイルを文字起こししてファイルに保存する関数
 
     Args:
-        wav_path (str): 入力音声ファイルのパス
-        output_path (str): 文字起こし結果を保存するテキストファイルのパス
+        audio_bytes (bytes): 音声データのバイナリ
         model_name (str): Whisperモデル名 ("tiny", "small", "medium", "large", "base" など)
     """
+    input_path = "/answer_data/input_stt.wav"
+
     # モデルロード
-    with open(wav_path, "wb") as f:
+    with open(input_path, "wb") as f:
         f.write(audio_bytes)
     model = whisper.load_model(model_name)
 
     # 推論
-    result = model.transcribe(wav_path)
+    result = model.transcribe(input_path)
     text = result["text"]
     print("Transcription:", text)
-
-    # ディレクトリがなければ作成
-
-    # ファイルに書き込み
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(text)
 
     return text
 
 # 使い方例
 if __name__ == "__main__":
-    wav_path = "asuno.wav"
     with open("asano.wav", "rb") as f:
         audio_bytes = f.read()
-    transcribe_audio(audio_bytes,wav_path, "./answer_data/output_moziokoshi.txt")
+    transcribe_audio(audio_bytes)
 
 # import whisper
 # import numpy as np
