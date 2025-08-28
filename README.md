@@ -2,17 +2,21 @@
 pip install -r requirements.txt
 version.docxにpip listしたやつのっけてる
 
+文字起こし・キャプションBGMプロンプト作成一気にやりたい時
+
+python promptmade.py
+
 文字起こし 
 
-whisper_test.py
+python whisper_test.py
 
 キャプション 
 
-effb2_test.py
+python effb2_test.py
 
 LLM 
 
-ollama_test.py
+python ollama_test.py
 
 
 sunoAPIとgptはまだうごかない
