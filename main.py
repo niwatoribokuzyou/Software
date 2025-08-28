@@ -7,7 +7,7 @@ app = FastAPI()
 
 class DataPayload(BaseModel):
 	audio_data: str
-	enviromental_data: dict
+	environmental_data: dict
 
 task_status_db = {}
 
@@ -25,7 +25,7 @@ async def receive_data(payload: DataPayload, background_tasks: BackgroundTasks):
 		generate_music_task,
 		task_id,
 		payload.audio_data,
-		payload.enviromental_data
+		payload.environmental_data
 	)
 
 	return {"message": "Data received and processing started.", "task_id": task_id} 
