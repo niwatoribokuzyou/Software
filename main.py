@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import uvicorn
 import uuid
 import base64
-from ollama_test import generate_bgm_prompt
+from gpt_test import chat_with_gpt
 from effb2_test import generate_audio_caption
 from whisper_test import transcribe_audio
 from music_generater import generate_music
@@ -35,7 +35,8 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 	caption = generate_audio_caption(decoded_audio)
 	stt_data = transcribe_audio(decoded_audio)
 
-	prompt = generate_bgm_prompt(stt_data, caption, temperature, humidity, pressure, illuminance)
+	prompt = chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminance)
+	print("Generated Prompt:", prompt)
 
 	# sunoを実装できたらここ
 	# music = generate_music(prompt)

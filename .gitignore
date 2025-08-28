@@ -11,3 +11,9 @@ test_sound.py
 !.gitignore
 
 __pycache__
+
+# 入力音声ファイル
+input_caption.mp3
+input_stt.mp3
+input_caption.wav
+input_stt.wav
