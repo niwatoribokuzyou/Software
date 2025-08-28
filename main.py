@@ -11,6 +11,11 @@ class DataPayload(BaseModel):
 
 task_status_db = {}
 
+def generate_music_task(task_id: str, audio_data: str, env_data: dict):
+	"""
+    時間のかかる音楽生成処理をシミュレートするバックグラウンドタスク
+    """
+
 @app.get("/api/v1/data", status_code=202)
 async def receive_data(payload: DataPayload, background_tasks: BackgroundTasks):
 	"""
