@@ -5,3 +5,7 @@ transformers
 torchaudio
 fastapi
 uvicorn
+pydub
+efficientnet_pytorch 
+einops
+soundfile
