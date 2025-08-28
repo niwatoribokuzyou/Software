@@ -30,6 +30,8 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 	humidity = env_data.get("humidity", 50)
 	illuminance = env_data.get("lux", 500)
 
+	# ここにサンプリングの処理を実装
+
 	caption = generate_audio_caption(decoded_audio)
 	stt_data = transcribe_audio(decoded_audio)
 
@@ -37,6 +39,7 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 
 	# sunoを実装できたらここ
 	# music = generate_music(prompt)
+	# 実装できたらmusicをresultで返す
 
   # ダミーの音楽データを生成
 	dummy_music_data = "This is a dummy music file generated from the provided data."
