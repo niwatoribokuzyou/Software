@@ -9,3 +9,5 @@ test_sound.py
 !version.docx
 !README.md
 !.gitignore
+
+__pycache__
