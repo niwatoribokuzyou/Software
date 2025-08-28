@@ -9,3 +9,5 @@ pydub
 efficientnet_pytorch 
 einops
 soundfile
+openai
+dotenv
