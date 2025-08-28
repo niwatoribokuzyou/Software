@@ -41,7 +41,7 @@ import os
 import ollama
 
 # def generate_bgm_prompt(kakidashi_path, caption_path, output_path, model_name="gemma3:4b"):
-def generate_bgm_prompt(kakidashi_path, caption_path, output_path, model_name="gpt-oss:20b"):
+def generate_bgm_prompt(kakidashi_path, caption_path,   output_path, room_temperature, room_illuminance, model_name="gpt-oss:20b"):
 
     """
     文字起こしと音声キャプションを使って、SunoでBGMを作成するためのプロンプトを生成し、ファイルに保存する関数
@@ -58,6 +58,7 @@ def generate_bgm_prompt(kakidashi_path, caption_path, output_path, model_name="g
     with open(caption_path, "r", encoding="utf-8") as f:
         query_caption = f.read().strip()
 
+    
     # プロンプト作成
     query = f"""
 以下の文字起こしとキャプションは同一音声から作り出されたものです。sunoでBGMを作成するためのテキストプロンプトを作ってください。
@@ -66,6 +67,11 @@ def generate_bgm_prompt(kakidashi_path, caption_path, output_path, model_name="g
 
 音声キャプション内容:
 「{query_caption}」
+
+BGMを流す部屋の環境
+- 温度:{room_temperature}℃
+- 照度:{room_illuminance}lx
+
 
 上記から、音楽の雰囲気、テンポ、楽器、ジャンルなどを具体的に想像して、Sunoで使えるBGMプロンプトを提案してください。
 生成する文字はプロンプトの文字だけでお願いします。 英語で140文字以下にしてください
@@ -95,8 +101,22 @@ def generate_bgm_prompt(kakidashi_path, caption_path, output_path, model_name="g
 
 # 使い方例
 if __name__ == "__main__":
+    # 部屋の環境情報（例：ベッドルーム）
+    room_temperature = 26  # ℃ (夏のベッドルームの温度)
+    room_illuminance = 30  # lx（就寝前リラックス用の低照度）
+
+    # 文字起こしを書き込んだファイル
+    kakidashi_path="./answer_data/output_moziokoshi.txt" 
+    # キャプションを書き込んだファイル
+    caption_path="./answer_data/output_caption.txt"
+    # BGM用プロンプトを書き込んだファイル
+    output_path="./answer_data/output_bgm_prompt.txt"
+
+
     generate_bgm_prompt(
-        kakidashi_path="./answer_data/output_moziokoshi.txt",
-        caption_path="./answer_data/output_caption.txt",
-        output_path="./answer_data/output_bgm_prompt.txt"
+        kakidashi_path,
+        caption_path,
+        output_path,
+        room_temperature,
+        room_illuminance,
     )
