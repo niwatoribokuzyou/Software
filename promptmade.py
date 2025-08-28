@@ -11,9 +11,14 @@ if __name__ == "__main__":
     caption_path = "./answer_data/output_caption.txt"
     moziokoshi_path = "./answer_data/output_moziokoshi.txt"
     bgm_prompt_path = "./answer_data/output_bgm_prompt.txt"
-    # 部屋の環境情報（例：ベッドルーム）
-    room_temperature = 26  # ℃ (夏のベッドルームの温度)
-    room_illuminance = 30  # lx（就寝前リラックス用の低照度）
+    # # 部屋の環境情報（例：ベッドルーム）
+    # room_temperature = 26  # ℃ (夏のベッドルームの温度)
+    # room_illuminance = 30  # lx（就寝前リラックス用の低照度）
+
+    # 部屋の環境情報（例：リビング・昼）
+    room_temperature = 24  # ℃（快適な冷房を効かせたリビング）
+    room_illuminance = 500  # lx（日中の自然光や照明で明るい状態）
+
 
     # 音源からキャプションを生成する関数
     # 第一引数音源のパス、第二引数キャプションを書き込むテキストファイルのパス

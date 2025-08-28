@@ -101,9 +101,13 @@ BGMを流す部屋の環境
 
 # 使い方例
 if __name__ == "__main__":
-    # 部屋の環境情報（例：ベッドルーム）
-    room_temperature = 26  # ℃ (夏のベッドルームの温度)
-    room_illuminance = 30  # lx（就寝前リラックス用の低照度）
+    # # 部屋の環境情報（例：ベッドルーム）
+    # room_temperature = 26  # ℃ (夏のベッドルームの温度)
+    # room_illuminance = 30  # lx（就寝前リラックス用の低照度）
+
+    # 部屋の環境情報（例：リビング・昼）
+    room_temperature = 24  # ℃（快適な冷房を効かせたリビング）
+    room_illuminance = 500  # lx（日中の自然光や照明で明るい状態）
 
     # 文字起こしを書き込んだファイル
     kakidashi_path="./answer_data/output_moziokoshi.txt" 
