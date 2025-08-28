@@ -3,7 +3,6 @@ from pydantic import BaseModel
 import uvicorn
 import uuid
 import base64
-import time
 from ollama_test import generate_bgm_prompt
 from effb2_test import generate_audio_caption
 from whisper_test import transcribe_audio
@@ -20,27 +19,34 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 	"""
   時間のかかる音楽生成処理をシミュレートするバックグラウンドタスク
   """
-  print(f"Task {task_id}: Processing started...")
+	print(f"Task {task_id}: Processing started...")
 
   # ここで音楽生成のロジックを実行
   # 例: audio_dataをデコードし、env_dataと組み合わせて音楽を生成	
 	decoded_audio = base64.b64decode(audio_data)
 
-	#本多ふぇーずはじまり
-	room_temperature = 24  # ℃（快適な冷房を効かせたリビング）
-	room_illuminance = 500
-	prompt = generate_music(decoded_audio, room_temperature, room_illuminance)
-	# 本多フェーズおわり
-    
+	temperature = env_data.get("temperature", 25)
+	pressure = env_data.get("pressure", 1013)
+	humidity = env_data.get("humidity", 50)
+	illuminance = env_data.get("lux", 500)
+
+	caption = generate_audio_caption(decoded_audio)
+	stt_data = transcribe_audio(decoded_audio)
+
+	prompt = generate_bgm_prompt(stt_data, caption, temperature, humidity, pressure, illuminance)
+
+	# sunoを実装できたらここ
+	# music = generate_music(prompt)
+
   # ダミーの音楽データを生成
-  dummy_music_data = "This is a dummy music file generated from the provided data."
+	dummy_music_data = "This is a dummy music file generated from the provided data."
     
   # 処理が完了したら、データベースの状態を更新
-  task_status_db[task_id] = {
+	task_status_db[task_id] = {
     "status": "completed",
     "result": dummy_music_data
   }
-  print(f"Task {task_id}: Processing completed.")
+	print(f"Task {task_id}: Processing completed.")
 
 @app.post("/api/v1/data", status_code=202)
 async def receive_data(payload: DataPayload, background_tasks: BackgroundTasks):
