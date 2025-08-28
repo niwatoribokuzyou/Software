@@ -35,7 +35,7 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
     }
     print(f"Task {task_id}: Processing completed.")
 
-@app.get("/api/v1/data", status_code=202)
+@app.post("/api/v1/data", status_code=202)
 async def receive_data(payload: DataPayload, background_tasks: BackgroundTasks):
 	"""
 	ラズパイから音声データと環境データを受付、音楽生成を開始
