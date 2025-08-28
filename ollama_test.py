@@ -41,7 +41,7 @@ import os
 import ollama
 
 # def generate_bgm_prompt(kakidashi_path, caption_path, output_path, model_name="gemma3:4b"):
-def generate_bgm_prompt(kakidashi_path, caption_path,   output_path, room_temperature, room_illuminance, model_name="gpt-oss:20b"):
+def generate_bgm_prompt(kakidashi_path, caption_path, room_temperature, room_illuminance, model_name="gpt-oss:20b"):
 
     """
     文字起こしと音声キャプションを使って、SunoでBGMを作成するためのプロンプトを生成し、ファイルに保存する関数
@@ -90,20 +90,24 @@ BGMを流す部屋の環境
     print("Generated BGM Prompt:", prompt_result)
 
     # ディレクトリがなければ作成
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    # os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    # プロンプトをファイルに書き込み
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(prompt_result)
+    # # プロンプトをファイルに書き込み
+    # with open(output_path, "w", encoding="utf-8") as f:
+    #     f.write(prompt_result)
 
     return prompt_result
 
 
 # 使い方例
 if __name__ == "__main__":
-    # 部屋の環境情報（例：ベッドルーム）
-    room_temperature = 26  # ℃ (夏のベッドルームの温度)
-    room_illuminance = 30  # lx（就寝前リラックス用の低照度）
+    # # 部屋の環境情報（例：ベッドルーム）
+    # room_temperature = 26  # ℃ (夏のベッドルームの温度)
+    # room_illuminance = 30  # lx（就寝前リラックス用の低照度）
+
+    # 部屋の環境情報（例：リビング・昼）
+    room_temperature = 24  # ℃（快適な冷房を効かせたリビング）
+    room_illuminance = 500  # lx（日中の自然光や照明で明るい状態）
 
     # 文字起こしを書き込んだファイル
     kakidashi_path="./answer_data/output_moziokoshi.txt" 
@@ -113,10 +117,10 @@ if __name__ == "__main__":
     output_path="./answer_data/output_bgm_prompt.txt"
 
 
-    generate_bgm_prompt(
+    prompt = generate_bgm_prompt(
         kakidashi_path,
         caption_path,
-        output_path,
+        
         room_temperature,
         room_illuminance,
     )
