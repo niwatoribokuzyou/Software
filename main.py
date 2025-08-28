@@ -1,5 +1,6 @@
 from fastapi import FastAPI, BackgroundTasks, HTTPException 
 from pydantic import BaseModel
+import uvicorn
 import uuid
 import base64
 
@@ -13,27 +14,24 @@ task_status_db = {}
 
 def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 	"""
-    時間のかかる音楽生成処理をシミュレートするバックグラウンドタスク
-    """
-    print(f"Task {task_id}: Processing started...")
-    
-    # 実際の音楽生成処理（例として10秒間の処理をシミュレート）
-    time.sleep(10)
-    
-    # ここで音楽生成のロジックを実行
-    # 例: audio_dataをデコードし、env_dataと組み合わせて音楽を生成
-    # decoded_audio = base64.b64decode(audio_data)
-    # music = some_music_generation_function(decoded_audio, env_data)
-    
-    # ダミーの音楽データを生成
-    dummy_music_data = "This is a dummy music file generated from the provided data."
-    
-    # 処理が完了したら、データベースの状態を更新
-    task_status_db[task_id] = {
-        "status": "completed",
-        "result": dummy_music_data
-    }
-    print(f"Task {task_id}: Processing completed.")
+	時間のかかる音楽生成処理をシミュレートするバックグラウンドタスク
+	"""
+	print(f"Task {task_id}: Processing started...")
+
+	# ここで音楽生成のロジックを実行
+	# 例: audio_dataをデコードし、env_dataと組み合わせて音楽を生成
+	# decoded_audio = base64.b64decode(audio_data)
+	# music = some_music_generation_function(decoded_audio, env_data)
+
+	# ダミーの音楽データを生成
+	dummy_music_data = "This is a dummy music file generated from the provided data."
+
+	# 処理が完了したら、データベースの状態を更新
+	task_status_db[task_id] = {
+		"status": "completed",
+		"result": dummy_music_data
+	}
+	print(f"Task {task_id}: Processing completed.")
 
 @app.post("/api/v1/data", status_code=202)
 async def receive_data(payload: DataPayload, background_tasks: BackgroundTasks):
@@ -70,3 +68,5 @@ async def get_task_status(task_id: str):
 	else:
 		return {"status": "processing"}
 
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
