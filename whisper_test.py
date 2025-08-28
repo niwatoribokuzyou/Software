@@ -37,4 +37,4 @@ def transcribe_audio(wav_path, output_path, model_name="base"):
 
 # 使い方例
 if __name__ == "__main__":
-    transcribe_audio("asano.wav", "./answer_data/output_kakidashi.txt")
+    transcribe_audio("asano.wav", "./answer_data/output_moziokoshi.txt")

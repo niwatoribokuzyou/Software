@@ -1,7 +1,7 @@
 *
 !*.py
 !*.txt
-!voice.wav
+!*.wav
 !answer_data/**
 asano.wav
 audiocaption_MIT_test.py

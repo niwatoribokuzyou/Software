@@ -96,7 +96,7 @@ def generate_bgm_prompt(kakidashi_path, caption_path, output_path, model_name="g
 # 使い方例
 if __name__ == "__main__":
     generate_bgm_prompt(
-        kakidashi_path="./answer_data/output_kakidashi.txt",
+        kakidashi_path="./answer_data/output_moziokoshi.txt",
         caption_path="./answer_data/output_caption.txt",
         output_path="./answer_data/output_bgm_prompt.txt"
     )
