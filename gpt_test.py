@@ -2,8 +2,6 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-
-
 def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminance, model="gpt-4o"):
     """
     ChatGPT API を使って応答を生成する関数
@@ -54,7 +52,6 @@ def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminanc
     最も自然なジャンルを jazz, rock, classical, pop, hiphop, reggae, blues, metal から選んで入れてください。
     出力はプロンプト文のみ、英語で140文字以内にしてください。
     """
-    
 
     response = client.chat.completions.create(
         model=model,
@@ -66,7 +63,6 @@ def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminanc
 
 
 if __name__ == "__main__":
-    
     temperature = 27#夜ベッド
     humidity = 60
     pressure = 1012
