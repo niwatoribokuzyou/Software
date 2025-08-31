@@ -2,7 +2,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminance, model="gpt-4o-mini"):
+def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminance, model="gpt-4o"):
     """
     ChatGPT API を使って応答を生成する関数
     """
@@ -13,25 +13,45 @@ def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminanc
 
 # クライアントを初期化（環境変数からAPIキーを自動で読み込み）
     client = OpenAI(api_key=api_key)
+#     prompt = f"""
+# 以下の文字起こしとキャプションは同一音声から作り出されたものです。sunoでBGMを作成するためのテキストプロンプトを作ってください。
+# 文字起こし内容:
+# 「{stt_data}」
+
+# 音声キャプション内容:
+# 「{caption}」
+
+# BGMを流す部屋の環境
+# - 温度:{temperature}℃
+# - 湿度:{humidity}%
+# - 気圧:{pressure}hPa
+# - 照度:{illuminance}lx
+
+
+# 上記から、音楽の雰囲気、テンポ、楽器、ジャンルなどを具体的に想像して、Sunoで使えるBGMプロンプトを提案してください。
+# 生成する文字はプロンプトの文字だけでお願いします。 英語で140文字以下にしてください
+# """
+
     prompt = f"""
-以下の文字起こしとキャプションは同一音声から作り出されたものです。sunoでBGMを作成するためのテキストプロンプトを作ってください。
-文字起こし内容:
-「{stt_data}」
+    以下の文字起こしとキャプションは同一音声から作られたものです。sunoでBGMを作成するためのテキストプロンプトを作ってください。
+    文字起こし内容:
+    「{stt_data}」
 
-音声キャプション内容:
-「{caption}」
+    音声キャプション内容:
+    「{caption}」
 
-BGMを流す部屋の環境
-- 温度:{temperature}℃
-- 湿度:{humidity}%
-- 気圧:{pressure}hPa
-- 照度:{illuminance}lx
+    BGMを流す部屋の環境:
+    - 温度:{temperature}℃
+    - 湿度:{humidity}%
+    - 気圧:{pressure}hPa
+    - 照度:{illuminance}lx
 
-
-上記から、音楽の雰囲気、テンポ、楽器、ジャンルなどを具体的に想像して、Sunoで使えるBGMプロンプトを提案してください。
-生成する文字はプロンプトの文字だけでお願いします。 英語で140文字以下にしてください
-"""
-    
+    上記から、音楽の雰囲気、テンポ、楽器、ジャンルを具体的に想像して、Sunoで使えるBGMプロンプトを提案してください。
+    照度は特にBGMを流す空間のムードを反映するので重視してください。
+    明るい場所では明るいBGM、暗い場所では暗いBGMにするようにしてください。
+    最も自然なジャンルを jazz, rock, classical, pop, hiphop, reggae, blues, metal から選んで入れてください。
+    出力はプロンプト文のみ、英語で140文字以内にしてください。
+    """
 
     response = client.chat.completions.create(
         model=model,
@@ -43,10 +63,15 @@ BGMを流す部屋の環境
 
 
 if __name__ == "__main__":
-    temperature = 24  # ℃（快適な冷房を効かせたリビング）
-    humidity = 50  # %（快適な湿度）
-    pressure = 1013  # hPa（標準気圧）
-    illuminance = 500  # lx（日中の自然光や照明で明るい状態）
+    temperature = 27#夜ベッド
+    humidity = 60
+    pressure = 1012
+    illuminance = 10
+
+    # temperature = 28#昼リビング
+    # humidity = 55
+    # pressure = 1012
+    # illuminance = 500
 
     # 文字起こしを書き込んだファイル
     stt_path="./answer_data/output_moziokoshi.txt" 

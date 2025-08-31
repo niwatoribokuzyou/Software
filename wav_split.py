@@ -30,8 +30,8 @@ def split_wav_by_seconds(input_file: str, output_dir: str, chunk_seconds: int = 
         output_file = os.path.join(output_dir, f"voice_chunk_{i+1}.wav")
         chunk.export(output_file, format="wav")
         print(f"Saved: {output_file}")
-    
-    return num_chunks, 
+    output_path = os.path.join(output_dir, f"voice_chunk_")
+    return num_chunks, output_path
 
 # 使い方例
 if __name__ == "__main__":

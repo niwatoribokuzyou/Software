@@ -11,3 +11,4 @@ einops
 soundfile
 openai
 dotenv
+spleeter

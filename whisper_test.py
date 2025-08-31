@@ -13,6 +13,7 @@ def transcribe_audio(audio_bytes, model_name="base"):
     input_path = "input_stt.wav"
     audio = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
     audio.export(input_path, format="wav")
+    
     # モデルロード
     model = whisper.load_model(model_name)
 

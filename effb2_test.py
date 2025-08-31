@@ -17,6 +17,7 @@ def generate_audio_caption(audio_bytes, model_name="wsntxxn/effb2-trm-audio-capt
     input_path = "input_caption.wav"
     audio = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
     audio.export(input_path, format="wav")
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # モデルとトークナイザ読み込み
