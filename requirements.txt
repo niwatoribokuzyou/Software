@@ -12,3 +12,8 @@ soundfile
 openai
 dotenv
 spleeter
+librosa
+soundfile
+numpy
+pandas
+scikit-learn
