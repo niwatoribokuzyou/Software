@@ -30,9 +30,11 @@ def generate_audio_caption(audio_bytes, model_name="wsntxxn/effb2-trm-audio-capt
         model_name (str): HuggingFaceモデル名
         tokenizer_name (str): HuggingFaceトークナイザ名
     """
-    input_path = "/answer_data/input_caption.wav"
+    input_path = "./answer_data/doa.mp3"
     with open(input_path, "wb") as f:
         f.write(audio_bytes)
+
+    
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # モデルとトークナイザ読み込み
@@ -57,7 +59,7 @@ def generate_audio_caption(audio_bytes, model_name="wsntxxn/effb2-trm-audio-capt
 
 
 if __name__ == "__main__":
-    with open("asano.wav", "rb") as f:
+    with open("./answer_data/doa.mp3", "rb") as f:
         audio_bytes = f.read()
     
     generate_audio_caption(audio_bytes)

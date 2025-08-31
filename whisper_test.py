@@ -9,7 +9,7 @@ def transcribe_audio(audio_bytes, model_name="base"):
         audio_bytes (bytes): 音声データのバイナリ
         model_name (str): Whisperモデル名 ("tiny", "small", "medium", "large", "base" など)
     """
-    input_path = "/answer_data/input_stt.wav"
+    input_path = "./answer_data/asano.wav"
 
     # モデルロード
     with open(input_path, "wb") as f:
@@ -25,7 +25,7 @@ def transcribe_audio(audio_bytes, model_name="base"):
 
 # 使い方例
 if __name__ == "__main__":
-    with open("asano.wav", "rb") as f:
+    with open("./answer_data/asano.wav", "rb") as f:
         audio_bytes = f.read()
     transcribe_audio(audio_bytes)
 

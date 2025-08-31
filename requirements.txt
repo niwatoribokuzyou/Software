@@ -5,3 +5,4 @@ transformers
 torchaudio
 fastapi
 uvicorn
+spleeter
