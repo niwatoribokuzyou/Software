@@ -1,4 +1,5 @@
-
+from pydub import AudioSegment
+import io
 import whisper
 
 def transcribe_audio(audio_bytes, model_name="base"):
@@ -9,11 +10,11 @@ def transcribe_audio(audio_bytes, model_name="base"):
         audio_bytes (bytes): 音声データのバイナリ
         model_name (str): Whisperモデル名 ("tiny", "small", "medium", "large", "base" など)
     """
-    input_path = "/answer_data/input_stt.wav"
-
+    input_path = "input_stt.wav"
+    audio = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
+    audio.export(input_path, format="wav")
+    
     # モデルロード
-    with open(input_path, "wb") as f:
-        f.write(audio_bytes)
     model = whisper.load_model(model_name)
 
     # 推論
@@ -25,7 +26,7 @@ def transcribe_audio(audio_bytes, model_name="base"):
 
 # 使い方例
 if __name__ == "__main__":
-    with open("asano.wav", "rb") as f:
+    with open("input_caption.mp3", "rb") as f:
         audio_bytes = f.read()
     transcribe_audio(audio_bytes)
 

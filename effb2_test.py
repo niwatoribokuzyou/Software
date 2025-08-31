@@ -1,24 +1,8 @@
+from pydub import AudioSegment
+import io
 import torch
 from transformers import AutoModel, PreTrainedTokenizerFast
 import torchaudio
-
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# model = AutoModel.from_pretrained("wsntxxn/effb2-trm-audio-captioning", trust_remote_code=True).to(device)
-# tokenizer = PreTrainedTokenizerFast.from_pretrained("wsntxxn/audiocaps-simple-tokenizer")
-
-# wav, sr = torchaudio.load("asano.wav")
-# wav = torchaudio.functional.resample(wav, sr, model.config.sample_rate)
-# if wav.size(0) > 1:
-#     wav = wav.mean(0).unsqueeze(0)
-
-# with torch.no_grad():
-#     word_idxs = model(audio=wav, audio_length=[wav.size(1)])
-
-# caption = tokenizer.decode(word_idxs[0], skip_special_tokens=True)
-# print("Caption:", caption)
-# with open("./answer_data/output_caption.txt", "w", encoding="utf-8") as f:
-#     f.write(caption)
-
 
 
 def generate_audio_caption(audio_bytes, model_name="wsntxxn/effb2-trm-audio-captioning", tokenizer_name="wsntxxn/audiocaps-simple-tokenizer") -> str:
@@ -30,9 +14,10 @@ def generate_audio_caption(audio_bytes, model_name="wsntxxn/effb2-trm-audio-capt
         model_name (str): HuggingFaceモデル名
         tokenizer_name (str): HuggingFaceトークナイザ名
     """
-    input_path = "/answer_data/input_caption.wav"
-    with open(input_path, "wb") as f:
-        f.write(audio_bytes)
+    input_path = "input_caption.wav"
+    audio = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
+    audio.export(input_path, format="wav")
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # モデルとトークナイザ読み込み
@@ -57,7 +42,7 @@ def generate_audio_caption(audio_bytes, model_name="wsntxxn/effb2-trm-audio-capt
 
 
 if __name__ == "__main__":
-    with open("asano.wav", "rb") as f:
+    with open("input_caption.mp3", "rb") as f:
         audio_bytes = f.read()
     
     generate_audio_caption(audio_bytes)
