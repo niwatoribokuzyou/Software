@@ -88,5 +88,17 @@ async def get_task_status(task_id: str):
 	else:
 		return {"status": "processing"}
 
+@app.get("/api/v1/get_mock_data")
+async def get_mock_data():
+	"""
+	生成済みの音源を返す
+	"""
+	sound_path = "output-f.mp3"
+	with open(sound_path, "rb") as f:
+		binary_mp3 = f.read()
+
+	encoded_audio = base64.b64encode(binary_mp3).decode("utf-8")
+	return {"status": "completed", "result": encoded_audio}
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
