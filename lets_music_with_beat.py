@@ -5,16 +5,16 @@ import librosa
 import numpy as np
 from pydub import AudioSegment
 
-from audio_events import AudioEvent, detect_and_slice
+from audio_events import detect_and_slice
 
 
+# 生成AIが作った音楽と環境音をmp3のバイナリで投げるといい感じにくっつけたmp3のバイナリを返してくれる関数
 def blend_soundscape_music(music: bytes, soundscape: bytes) -> bytes:
     bio_music = BytesIO(music)
-    music_segment = AudioSegment.from_file(bio_music, format="wav")
+    music_segment = AudioSegment.from_file(bio_music, format="mp3")
     music_segment.set_frame_rate(16000)
 
     total_len = len(music_segment)  # ms
-    print(total_len)
     segment_len = total_len // 4  # 4分割
     min_interval = 800  # ms
 
@@ -25,7 +25,7 @@ def blend_soundscape_music(music: bytes, soundscape: bytes) -> bytes:
     output = music_segment
 
     # librosaでビート解析
-    y, sr = load_audio_bytes_anyformat(music, target_sr=16000, mono=True, fmt="wav")
+    y, sr = load_audio_bytes_anyformat(music, target_sr=16000, mono=True, fmt="mp3")
     tempo, beat_frames = librosa.beat.beat_track(y=y, sr=16000)
     beat_times = librosa.frames_to_time(beat_frames, sr=16000) * 1000
     beat_times = beat_times.astype(int)
@@ -69,7 +69,11 @@ def blend_soundscape_music(music: bytes, soundscape: bytes) -> bytes:
                 last_time = t
                 counter += 1
 
-    return output
+    mp3_binary_data = BytesIO()
+    output.export(mp3_binary_data, format="mp3")
+    binary_mp3 = mp3_binary_data.getvalue()
+
+    return binary_mp3
 
 
 def load_audio_bytes_anyformat(
@@ -168,16 +172,17 @@ def np_float32_to_audiosegment(
 
 
 if __name__ == "__main__":
-    wav_music = "output-ribingu.wav"
-    wav_env = "voice.wav"
-    with open(wav_music, "rb") as f:
+    music = "output-ribingu.mp3"
+    env = "voice.mp3"
+    with open(music, "rb") as f:
         music_data = f.read()
-    with open(wav_env, "rb") as f:
+    with open(env, "rb") as f:
         env_data = f.read()
 
     output = blend_soundscape_music(music_data, env_data)
 
     # 保存
-    output_path = os.path.join("./outputs/", f"answer-{wav_env}")
-    output.export(output_path, format="wav")
+    output_path = os.path.join("./outputs/", f"answer-{env}")
+    with open(output_path, "wb") as f:
+        f.write(output)
     print(f"環境音をBGM音量に合わせて2番目と4番目に重ねたBGMを保存しました: {output_path}")
