@@ -1,19 +1,17 @@
 *
 !*.py
 !*.txt
-!*.wav
+!voice.wav
+!voice.mp3
+
+!voice_chunk_2.mp3
+
 !answer_data/**
-asano.wav
 audiocaption_MIT_test.py
 test_sound.py
-!version.docx
+sunoAPI_test.py
 !README.md
 !.gitignore
 
 __pycache__
 
-# 入力音声ファイル
-input_caption.mp3
-input_stt.mp3
-input_caption.wav
-input_stt.wav
