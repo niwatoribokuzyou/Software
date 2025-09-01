@@ -30,8 +30,12 @@ def blend_soundscape_music(music: bytes, soundscape: bytes) -> bytes:
     beat_times = librosa.frames_to_time(beat_frames, sr=16000) * 1000
     beat_times = beat_times.astype(int)
 
-    # 本当はもっと減るはずだが面倒なのでとりあえず
-    num_beats = len(beat_frames)
+    num_beats = 0
+    for seg_idx in env_segments:
+        start_ms = seg_idx * segment_len
+        end_ms = (seg_idx + 1) * segment_len if seg_idx < 3 else total_len
+        # 近接したビートを除かないざっくりした個数
+        num_beats += sum(start_ms <= t < end_ms for t in beat_times)
 
     env_events = detect_and_slice(
         soundscape,
