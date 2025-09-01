@@ -23,7 +23,7 @@ def generate_music(prompt, kankyouonn):
 #     sf.write(buffer, music, sr, format='WAV')
 #     buffer.seek(0)
 # # バイト列を base64 に変換
-    encoded_audio = base64.b64encode(combine_music)
+    encoded_audio = base64.b64encode(combine_music).decode("utf-8")
     return encoded_audio
 
 if __name__ == "__main__":
