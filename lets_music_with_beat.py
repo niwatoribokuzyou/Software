@@ -16,7 +16,7 @@ def blend_soundscape_music(music: bytes, soundscape: bytes) -> bytes:
 
     total_len = len(music_segment)  # ms
     segment_len = total_len // 4  # 4分割
-    min_interval = 800  # ms
+    min_interval = 1000  # ms
 
     # 環境音を重ねるセグメント（2番目と4番目）
     env_segments = [1, 3]
