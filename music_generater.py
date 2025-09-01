@@ -19,11 +19,11 @@ def generate_music(prompt, kankyouonn):
     music, sr = generates(prompt)
 
     combine_music = blend_soundscape_music(music, kankyouonn)
-    buffer = io.BytesIO()
+    # buffer = io.BytesIO()
 #     sf.write(buffer, music, sr, format='WAV')
 #     buffer.seek(0)
 # # バイト列を base64 に変換
-    encoded_audio = base64.b64encode(buffer.read())
+    encoded_audio = base64.b64encode(combine_music)
     return encoded_audio
 
 if __name__ == "__main__":

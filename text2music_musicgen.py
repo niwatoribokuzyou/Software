@@ -42,7 +42,7 @@ print("audio_int16", audio_int16)
 print("type:", type(audio_int16))
 print("dtype:", audio_int16.dtype)
 print("shape:", audio_int16.shape)
-exit()
+# exit()
 # サンプルレートを手動で指定（MusicGenは通常32kHz）
 samplerate = 32000
 
