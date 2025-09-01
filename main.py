@@ -40,7 +40,7 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 	print("Generated Prompt:", prompt)
 
 	# sunoを実装できたらここ
-	music = generate_music(prompt)
+	music = generate_music(prompt, decoded_audio)
 	# 実装できたらmusicをresultで返す
 	
   # ダミーの音楽データを生成
