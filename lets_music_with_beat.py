@@ -76,7 +76,11 @@ def blend_soundscape_music(music: bytes, soundscape: bytes) -> bytes:
     mp3_binary_data = BytesIO()
     output.export(mp3_binary_data, format="mp3")
     binary_mp3 = mp3_binary_data.getvalue()
+    # ファイルに保存
+    with open("output-f.mp3", "wb") as f:
+        f.write(binary_mp3)
 
+    print("✅ output-f.mp3 を保存しました！")
     return binary_mp3
 
 

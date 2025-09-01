@@ -32,15 +32,19 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 
 
 	# ここにサンプリングの処理を実装
-
+	# print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 	caption = generate_audio_caption(decoded_audio)
+	# print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+
 	stt_data = transcribe_audio(decoded_audio)
+	# print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
 
 	prompt = chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminance)
 	print("Generated Prompt:", prompt)
 
 	# sunoを実装できたらここ
 	music = generate_music(prompt, decoded_audio)
+	# print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
 
   # 処理が完了したら、データベースの状態を更新
 	task_status_db[task_id] = {

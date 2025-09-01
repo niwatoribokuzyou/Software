@@ -10,15 +10,22 @@ def transcribe_audio(audio_bytes, model_name="base"):
         audio_bytes (bytes): 音声データのバイナリ
         model_name (str): Whisperモデル名 ("tiny", "small", "medium", "large", "base" など)
     """
+    # print("aaaaaaaaaaaaaaaaaaa")
     input_path = "input_stt.wav"
     audio = AudioSegment.from_file(io.BytesIO(audio_bytes), format="mp3")
+    # print("bbbbbbbbbbbbbbbbb")
+
     audio.export(input_path, format="wav")
+    # print("cccccccccccccccccccccc")
     
     # モデルロード
     model = whisper.load_model(model_name)
+    # print("ddddddddddddddddd")
 
     # 推論
     result = model.transcribe(input_path)
+    # print("eeeeeeeeeeeeeeeeeeeeee")
+
     text = result["text"]
     print("Transcription:", text)
 
