@@ -92,10 +92,21 @@ async def get_task_status(task_id: str):
 async def get_mock_data():
 	"""
 	生成済みの音源を返す
+	Returns:
+		dict: A JSON object with the following structure:
+      {
+				"status": "completed",
+				"result": "<base64-encoded audio string>"
+			}
+	Error Cases:
+		- If the audio file does not exist or cannot be read, an HTTP 500 error may be returned.
 	"""
 	sound_path = "output-f.mp3"
-	with open(sound_path, "rb") as f:
-		binary_mp3 = f.read()
+	try:
+		with open(sound_path, "rb") as f:
+			binary_mp3 = f.read()
+	except FileNotFoundError:
+		raise HTTPException(status_code=404, detail="Mock audio file not found.")
 
 	encoded_audio = base64.b64encode(binary_mp3).decode("utf-8")
 	return {"status": "completed", "result": encoded_audio}
