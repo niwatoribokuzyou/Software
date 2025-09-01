@@ -14,6 +14,8 @@ audio_events.py — 生活音のイベント検出→切り出しをバッチ返
 """
 from __future__ import annotations
 
+import hashlib
+import io
 import json
 import os
 import uuid
@@ -405,7 +407,7 @@ def facility_location_select(
 
 
 def detect_and_slice(
-    input_audio: Union[str, Tuple[np.ndarray, int]],
+    input_audio: Union[str, bytes, bytearray, Tuple[np.ndarray, int]],
     *,
     sr: int = 16000,
     n_fft: int = 1024,
@@ -436,15 +438,35 @@ def detect_and_slice(
     入力: Wavパス or (y, sr) タプル
     出力: List[AudioEvent]（保存はしない）
     """
-    # 入力処理
+    # 入力処理（path / (y, sr) / bytes に対応）
     if isinstance(input_audio, tuple):
+        # (y, sr) タプル入力
         y, sr_in = input_audio
         if sr_in != sr:
             y = librosa.resample(y.astype(np.float32), orig_sr=sr_in, target_sr=sr)
+        source_uri = "<array>"
+    elif isinstance(input_audio, (bytes, bytearray)):
+        # bytes 入力：まず SoundFile で読む（WAV/FLAC/OGG 対応）
+        buf = io.BytesIO(input_audio)
+        try:
+            y, sr_in = sf.read(buf, dtype="float32", always_2d=False)
+            # 多chならモノラル化（必要に応じて変更可）
+            if isinstance(y, np.ndarray) and y.ndim == 2:
+                y = y.mean(axis=1)
+        except Exception:
+            # 失敗時フォールバック：librosa（バックエンドにより非対応形式あり）
+            buf.seek(0)
+            y, sr_in = librosa.load(buf, sr=None, mono=True)
+        if sr_in != sr:
+            y = librosa.resample(y.astype(np.float32), orig_sr=sr_in, target_sr=sr)
+        # 元がbytesなのでハッシュをURI代わりにしておくと後段で追跡しやすい
+        source_uri = f"bytes://sha1={hashlib.sha1(input_audio).hexdigest()[:10]}"
     else:
+        # 文字列パス入力
         y, _ = librosa.load(str(input_audio), sr=sr, mono=True)
-    y = librosa.util.normalize(y.astype(np.float32))
-    source_uri = input_audio[0] if isinstance(input_audio, tuple) else str(input_audio)
+        source_uri = str(input_audio)
+
+    y = librosa.util.normalize(np.asarray(y, dtype=np.float32))
 
     # HPSS → オンセット → オフセット
     y_p = hpss_percussive(

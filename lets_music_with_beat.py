@@ -1,154 +1,3 @@
-
-# # from pydub import AudioSegment
-# # import librosa
-# # import os
-# # import numpy as np
-
-# # wav_files = ["output-ribingu.wav", "output-bed.wav"]
-# # min_interval = 800  # ms
-
-# # for wav_file in wav_files:
-# #     path = wav_file
-# #     print("path", path)
-    
-# #     # BGM読み込み（全体流す）
-# #     bgm = AudioSegment.from_file(path)
-# #     total_len = len(bgm)  # ms
-# #     segment_len = total_len // 4  # 4分割
-
-# #     # 短音読み込み（音量は関係なし）
-# #     short_sound_orig = AudioSegment.from_file("./鍵を開ける1.mp3")
-# #     short_sound_orig = short_sound_orig - short_sound_orig.dBFS  # 基準化
-
-# #     # 環境音を重ねるセグメント（2番目と4番目）
-# #     env_segments = [1, 3]
-
-# #     # 出力はBGMで初期化
-# #     output = bgm
-
-# #     # librosaでビート解析
-# #     y, sr = librosa.load(path)
-# #     print("y",y)
-# #     print("type:", type(y))          # <class 'numpy.ndarray'>
-# #     print("dtype:", y.dtype)         # float32
-# #     print("shape:", y.shape) 
-# #     exit()
-# #     tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
-# #     beat_times = librosa.frames_to_time(beat_frames, sr=sr) * 1000
-# #     beat_times = beat_times.astype(int)
-
-# #     last_time = -min_interval
-
-# #     # 環境音を重ねる
-# #     for seg_idx in env_segments:
-# #         start_ms = seg_idx * segment_len
-# #         end_ms = (seg_idx + 1) * segment_len if seg_idx < 3 else total_len
-
-# #         for t in beat_times:
-# #             if start_ms <= t < end_ms and t - last_time >= min_interval:
-# #                 # 短音の音量をBGMのその位置の音量に合わせる
-# #                 bgm_slice = bgm[t:t+len(short_sound_orig)]
-# #                 gain = bgm_slice.dBFS
-# #                 short_sound = short_sound_orig.apply_gain(gain+10)
-
-# #                 output = output.overlay(short_sound, position=int(t))
-# #                 last_time = t
-
-# #     # 保存
-# #     output_path = os.path.join('./test/', f'answer-{wav_file}')
-# #     output.export(output_path, format="wav")
-# #     print(f"環境音をBGM音量に合わせて2番目と4番目に重ねたBGMを保存しました: {output_path}")
-
-
-
-
-# from pydub import AudioSegment
-# import librosa
-# import os
-# import numpy as np
-# import soundfile as sf
-
-# def rms_db(wave):
-#     rms = np.sqrt(np.mean(wave**2))
-#     return 20 * np.log10(rms + 1e-9)
-
-# # -----------------------------
-# # 短音をnumpyでBGMに重ねる
-# # -----------------------------
-# def overlay_short_sounds_numpy(BGM, sr, short_audio, output_path):
-#     """
-#     BGM: np.ndarray, float32 [-1,1]
-#     sr: サンプルレート
-#     short_sound_path: 短音ファイルパス
-#     output_path: 保存先
-#     min_interval: ms, 短音を重ねる最小間隔
-#     gain_db: BGMよりどれくらい大きくするか
-#     """
-#     # 短音読み込み
-#     min_interval=800
-#     gain_db=2.0
-#     # short_audio, short_sr = librosa.load(short_sound_path, sr=sr)
-
-    
-
-#     # print("short_audio", short_audio)
-#     # print("short_audio", type(short_audio))
-#     # print("dtype:", short_audio.dtype)
-#     # print("shape:", short_audio.shape)
-#     # exit()
-
-#     output = BGM.copy()
-#     total_len = len(BGM)
-#     segment_len = total_len // 4
-#     env_segments = [1, 3]  # 2番目と4番目のセグメントのみ短音を重ねる
-
-#     # ビート解析
-#     tempo, beat_frames = librosa.beat.beat_track(y=BGM, sr=sr)
-#     beat_times = librosa.frames_to_time(beat_frames, sr=sr)  # 秒
-#     beat_samples = (beat_times * sr).astype(int)
-
-#     last_sample = -int(min_interval / 1000 * sr)
-
-#     for t in beat_samples:
-#         seg_idx = t // segment_len
-#         if seg_idx not in env_segments:
-#             continue  # 環境音を重ねないターンはスキップ
-
-#         if t - last_sample >= int(min_interval / 1000 * sr):
-#             start = t
-#             end = t + len(short_audio)
-#             if end > len(output):
-#                 end = len(output)
-#                 short_slice = short_audio[:end-start]
-#             else:
-#                 short_slice = short_audio
-
-#             # BGM の RMS を取得して短音をスケーリング
-#             bgm_rms_db = rms_db(output[start:end])
-#             short_rms_db = rms_db(short_slice)
-#             scale_db = bgm_rms_db - short_rms_db + gain_db
-#             scale = 10 ** (scale_db / 20)
-#             short_slice_scaled = short_slice * scale
-
-#             # 加算してクリッピング
-#             output[start:end] += short_slice_scaled
-#             output[start:end] = np.clip(output[start:end], -1.0, 1.0)
-
-#             last_sample = t
-
-#     # 保存
-#     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-#     sf.write(output_path, output, sr)
-#     print(f"✅ 保存しました: {output_path}")
-#     return output
-
-
-
-
-
-
-
-
 import os
 from io import BytesIO
 
@@ -181,8 +30,12 @@ def blend_soundscape_music(music: bytes, soundscape: bytes) -> bytes:
     beat_times = librosa.frames_to_time(beat_frames, sr=16000) * 1000
     beat_times = beat_times.astype(int)
 
-    # 本当はもっと減るはずだが面倒なのでとりあえず
-    num_beats = len(beat_frames)
+    num_beats = 0
+    for seg_idx in env_segments:
+        start_ms = seg_idx * segment_len
+        end_ms = (seg_idx + 1) * segment_len if seg_idx < 3 else total_len
+        # 近接したビートを除かないざっくりした個数
+        num_beats += sum(start_ms <= t < end_ms for t in beat_times)
 
     env_events = detect_and_slice(
         soundscape,
