@@ -5,6 +5,7 @@ import numpy as np
 import time  # 追加
 
 # GPU使用
+
 device = 0
 print(f"Using device: {'GPU' if torch.cuda.is_available() else 'CPU'}")
 pipe = pipeline("text-to-audio", model="facebook/musicgen-small", device=device)
@@ -26,10 +27,22 @@ print(f"⏱ 音楽生成にかかった時間: {end_time - start_time:.2f} 秒")
 audio = music["audio"].squeeze(0)
 if audio.ndim == 1:
     audio = audio[np.newaxis, :]
+re_audio = audio.squeeze(0)
+print("re_audio", re_audio.shape)
 
+
+print("audio", audio)
+print("type:", type(audio))
+print("dtype:", audio.dtype)
+print("shape:", audio.shape)
 # float32 → int16
 audio_int16 = np.clip(audio * 32767, -32768, 32767).astype(np.int16)
 
+print("audio_int16", audio_int16)
+print("type:", type(audio_int16))
+print("dtype:", audio_int16.dtype)
+print("shape:", audio_int16.shape)
+# exit()
 # サンプルレートを手動で指定（MusicGenは通常32kHz）
 samplerate = 32000
 

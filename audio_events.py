@@ -574,6 +574,11 @@ def save_events(
     os.makedirs(out_dir, exist_ok=True)
     if save_audio:
         for e in events:
+            print("e.audio", e.audio)
+            print("type", type(e.audio))
+            print("dtype:", e.audio.dtype)
+            print("shape:", e.audio.shape)
+            print("FINISH")
             sf.write(
                 os.path.join(out_dir, f"{e.id}.wav"), e.audio, e.sr, subtype=subtype
             )
@@ -665,7 +670,8 @@ if __name__ == "__main__":
     os.makedirs(args.out_dir, exist_ok=True)
     ts = _dt.datetime.now().strftime("%Y%m%d-%H%M%S")
     print(f"[DEBUG] Start dump -> {args.out_dir}  ({ts})")
-
+    print("paths", paths)
+    exit()
     for path in paths:
         print(f"[INFO] Processing: {path}")
         events = detect_and_slice(
@@ -725,6 +731,8 @@ if __name__ == "__main__":
             },
             "timestamp": ts,
         }
+        # print("events", events)
+        # exit()
         save_events(
             events,
             out_dir=out,
