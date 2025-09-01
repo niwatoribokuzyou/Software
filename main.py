@@ -5,6 +5,7 @@ import uvicorn
 from fastapi import BackgroundTasks, FastAPI, HTTPException
 from pydantic import BaseModel
 
+from audio_events import AudioEvent, detect_and_slice
 from effb2_test import generate_audio_caption
 from gpt_test import chat_with_gpt
 from music_generater import generate_music
@@ -48,6 +49,8 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
     # sunoを実装できたらここ
     # music = generate_music(prompt)
     # 実装できたらmusicをresultで返す
+
+    # music_w_soundscape = blend_soundscape_music(music, decoded_audio)
 
     # ダミーの音楽データを生成
     dummy_music_data = "This is a dummy music file generated from the provided data."
