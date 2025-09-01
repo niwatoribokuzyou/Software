@@ -41,15 +41,11 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 
 	# sunoを実装できたらここ
 	music = generate_music(prompt, decoded_audio)
-	# 実装できたらmusicをresultで返す
-	
-  # ダミーの音楽データを生成
-	dummy_music_data = "This is a dummy music file generated from the provided data."
-    
+
   # 処理が完了したら、データベースの状態を更新
 	task_status_db[task_id] = {
     "status": "completed",
-    "result": dummy_music_data
+    "result": music
   }
 	print(f"Task {task_id}: Processing completed.")
 
