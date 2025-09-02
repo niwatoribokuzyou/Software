@@ -42,7 +42,7 @@ def generate_audio_caption(audio_bytes, model_name="wsntxxn/effb2-trm-audio-capt
 
 
 if __name__ == "__main__":
-    with open("input_caption.mp3", "rb") as f:
+    with open("./voice_chunk_2.mp3", "rb") as f:
         audio_bytes = f.read()
     
     generate_audio_caption(audio_bytes)

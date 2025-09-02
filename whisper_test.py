@@ -33,7 +33,7 @@ def transcribe_audio(audio_bytes, model_name="base"):
 
 # 使い方例
 if __name__ == "__main__":
-    with open("input_caption.mp3", "rb") as f:
+    with open("./voice_chunk_2.mp3", "rb") as f:
         audio_bytes = f.read()
     transcribe_audio(audio_bytes)
 

@@ -32,24 +32,22 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 
 
 	# ここにサンプリングの処理を実装
-	# print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 	caption = generate_audio_caption(decoded_audio)
-	# print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
 
 	stt_data = transcribe_audio(decoded_audio)
-	# print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
 
-	prompt = chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminance)
+	prompt, min_color, max_color = chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminance)
 	print("Generated Prompt:", prompt)
 
 	# sunoを実装できたらここ
 	music = generate_music(prompt, decoded_audio)
-	# print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
 
   # 処理が完了したら、データベースの状態を更新
 	task_status_db[task_id] = {
     "status": "completed",
-    "result": music
+    "result": music,
+    "min_color": min_color,
+    "max_color": max_color,
   }
 	print(f"Task {task_id}: Processing completed.")
 
@@ -109,7 +107,7 @@ async def get_mock_data():
 		raise HTTPException(status_code=404, detail="Mock audio file not found.")
 
 	encoded_audio = base64.b64encode(binary_mp3).decode("utf-8")
-	return {"status": "completed", "result": encoded_audio}
+	return {"status": "completed", "result": encoded_audio, "min_color": "#A8BFCF", "max_color": "#D3E0E9"}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
