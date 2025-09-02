@@ -51,7 +51,7 @@ def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminanc
     出力はプロンプト文のみ、英語で150文字以内にしてください。
     """
     print("prompt",prompt)
-    exit()
+    # exit()
     response = client.chat.completions.create(
         model=model,
         messages=[{"role": "user", "content": prompt}],
