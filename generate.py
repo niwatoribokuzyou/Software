@@ -18,7 +18,7 @@ def generates(prompt):
     start_time = time.time()  # ここから計測
     music = pipe(
         prompt,
-        forward_params={"do_sample": True, "max_new_tokens": 512}
+        forward_params={"do_sample": True, "max_new_tokens": 1536}
     )
     end_time = time.time()  # ここまで計測
 

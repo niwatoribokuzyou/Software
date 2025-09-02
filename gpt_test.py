@@ -140,13 +140,6 @@ if __name__ == "__main__":
 
     
 
-    # JSONファイルに保存
-    # with open("led_colors.json", "w") as f:
-    #     json.dump(led_colors, f, indent=2)
-
-
-
-    # print("Assistant:", prompt)
 
 
 
