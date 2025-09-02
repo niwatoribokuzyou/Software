@@ -99,8 +99,10 @@ def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminanc
     min_color_str = str(data["min_color"])
     max_color_str = str(data["max_color"])
 
+    print("min_color11111:", min_color_str)
     # print("min_color:", min_color_str)
-    # print("max_color:", max_color_str)
+
+    print("max_color11111:", max_color_str)
 
     return bgm_prompt, min_color_str, max_color_str
 
@@ -146,7 +148,7 @@ if __name__ == "__main__":
 # from openai import OpenAI
 # from dotenv import load_dotenv
 # import os
-
+# from generate import generates
 # def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminance, datetime_info, weather_info, model="gpt-4o"):
 #     """
 #     ChatGPT API を使ってBGMプロンプトを生成する関数
@@ -213,7 +215,7 @@ if __name__ == "__main__":
 #         {"season": "冬", "datetime_info": "2025-12-01 22:00 夜", "temperature": 22, "humidity": 35, "illuminance": 10, "weather": "晴れ"},
 #     ]
 
-#     for sc in scenarios:
+#     for i, sc in enumerate(scenarios):
 #         print(f"--- Scenario: {sc['season']} {sc['datetime_info']} illuminance={sc['illuminance']} ---")
 #         prompt_text = chat_with_gpt(
 #             stt_data,
@@ -225,5 +227,6 @@ if __name__ == "__main__":
 #             sc["datetime_info"],
 #             sc["weather"]
 #         )
-#         print(prompt_text)
+#         generates(prompt_text, i)
+#         print(prompt_text, i)
 #         print("\n")

@@ -7,6 +7,9 @@ from gpt_test import chat_with_gpt
 from effb2_test import generate_audio_caption
 from whisper_test import transcribe_audio
 from music_generater import generate_music
+from typing import List
+from fastapi import FastAPI, HTTPException, Body, Query
+
 app = FastAPI()
 
 class DataPayload(BaseModel):
@@ -40,7 +43,11 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
 	print("Generated Prompt:", prompt)
 
 	# sunoを実装できたらここ
-	music = generate_music(prompt, decoded_audio)
+	music, bpm = generate_music(prompt, decoded_audio)
+	
+	# bpm = 90
+	print("min_color", min_color)
+	print("max_color", max_color)
 
   # 処理が完了したら、データベースの状態を更新
 	task_status_db[task_id] = {
@@ -48,6 +55,7 @@ def generate_music_task(task_id: str, audio_data: str, env_data: dict):
     "result": music,
     "min_color": min_color,
     "max_color": max_color,
+	"bpm": bpm[0]
   }
 	print(f"Task {task_id}: Processing completed.")
 
@@ -70,6 +78,55 @@ async def receive_data(payload: DataPayload, background_tasks: BackgroundTasks):
 
 	return {"message": "Data received and processing started.", "task_id": task_id} 
 
+@app.get("/api/v1/task_list")
+# async def get_task_status(task_ids: list[str]):
+async def get_task_status_list(task_ids: List[str] = Query(...)):
+	"""
+	指定されたtask_idの処理状況を返す
+	"""
+	print("aaaaaaaaaaaaaaaaaaaaaaaaaa")
+	for task_id in task_ids:
+		if task_id not in task_status_db:
+			raise HTTPException(status_code=404, detail="Task ID not found")
+		try:
+			task = task_status_db.get(task_id)
+			if task and task.get("status") == "completed":
+				return True
+			else:
+				print("だめ")
+				continue
+		except Exception as e:
+        	# 例外が起きた場合、HTTP 500で詳細メッセージを返す
+			raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+	
+
+	return False
+
+
+# @app.post("/api/v1/task_list")
+# # async def get_task_status(task_ids: list[str]):
+# async def get_task_status_list(task_ids: list[str] = Body(...)):
+# 	"""
+# 	指定されたtask_idの処理状況を返す
+# 	"""
+# 	print("aaaaaaaaaaaaaaaaaaaaaaaaaa")
+# 	for task_id in task_ids:
+# 		if task_id not in task_status_db:
+# 			raise HTTPException(status_code=404, detail="Task ID not found")
+# 		try:
+# 			task = task_status_db.get(task_id)
+# 			if task and task.get("status") == "completed":
+# 				return True
+# 			else:
+# 				print("だめ")
+# 				continue
+# 		except Exception as e:
+#         	# 例外が起きた場合、HTTP 500で詳細メッセージを返す
+# 			raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+	
+
+# 	return False
+
 @app.get("/api/v1/status/{task_id}")
 async def get_task_status(task_id: str):
 	"""
@@ -80,9 +137,13 @@ async def get_task_status(task_id: str):
 		raise HTTPException(status_code=404, detail="Task ID not found")
 
 	task = task_status_db[task_id]
+	print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
+	print("task",task)
 	if task["status"] == "completed":
-		return {"status": "completed", "result": task["result"]}
+		return {"status": "completed", "result": task["result"], "min_color": task["min_color"], "max_color": task["max_color"], "bpm": task["bpm"]}
+		# return {"status": "completed", "min_color": task["min_color"], "max_color": task["max_color"], "bpm": task["bpm"]}
+	
 	else:
 		return {"status": "processing"}
 
@@ -107,7 +168,7 @@ async def get_mock_data():
 		raise HTTPException(status_code=404, detail="Mock audio file not found.")
 
 	encoded_audio = base64.b64encode(binary_mp3).decode("utf-8")
-	return {"status": "completed", "result": encoded_audio, "min_color": "#A8BFCF", "max_color": "#D3E0E9"}
+	return {"status": "completed", "result": encoded_audio, "min_color": "#EC0101F8", "max_color": "#D3E0E9", "bpm": 120}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

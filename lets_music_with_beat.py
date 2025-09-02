@@ -81,7 +81,7 @@ def blend_soundscape_music(music: bytes, soundscape: bytes) -> bytes:
         f.write(binary_mp3)
 
     print("✅ output-f.mp3 を保存しました！")
-    return binary_mp3
+    return binary_mp3, tempo
 
 
 def load_audio_bytes_anyformat(

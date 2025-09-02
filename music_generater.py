@@ -18,13 +18,13 @@ def generate_music(prompt, kankyouonn):
     #たぶん
     music, sr = generates(prompt)
 
-    combine_music = blend_soundscape_music(music, kankyouonn)
+    combine_music, bpm = blend_soundscape_music(music, kankyouonn)
     # buffer = io.BytesIO()
 #     sf.write(buffer, music, sr, format='WAV')
 #     buffer.seek(0)
 # # バイト列を base64 に変換
     encoded_audio = base64.b64encode(combine_music).decode("utf-8")
-    return encoded_audio
+    return encoded_audio, bpm
 
 if __name__ == "__main__":
     prompt = "Generated BGM Prompt"
