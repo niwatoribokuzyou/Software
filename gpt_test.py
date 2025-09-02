@@ -1,39 +1,35 @@
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
-
+from datetime import datetime
+from wheather import get_weather_by_location
 def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminance, model="gpt-4o"):
     """
     ChatGPT API を使って応答を生成する関数
     """
     load_dotenv()
+    now = datetime.now()
+    hour = now.hour
+    if 5 <= hour < 11:
+        tod = "朝"
+    elif 11 <= hour < 17:
+        tod = "昼"
+    elif 17 <= hour < 20:
+        tod = "夕方"
+    else:
+        tod = "夜"
+    datetime_info = now.strftime(f"%Y-%m-%d %H:%M {tod}")
+    # print("datetime_info",datetime_info)
 
+    wheather_imformation = get_weather_by_location()
 # 環境変数からAPIキーを取得
     api_key = os.getenv("OPEN_AI_APIKEY")
 
 # クライアントを初期化（環境変数からAPIキーを自動で読み込み）
     client = OpenAI(api_key=api_key)
-#     prompt = f"""
-# 以下の文字起こしとキャプションは同一音声から作り出されたものです。sunoでBGMを作成するためのテキストプロンプトを作ってください。
-# 文字起こし内容:
-# 「{stt_data}」
-
-# 音声キャプション内容:
-# 「{caption}」
-
-# BGMを流す部屋の環境
-# - 温度:{temperature}℃
-# - 湿度:{humidity}%
-# - 気圧:{pressure}hPa
-# - 照度:{illuminance}lx
-
-
-# 上記から、音楽の雰囲気、テンポ、楽器、ジャンルなどを具体的に想像して、Sunoで使えるBGMプロンプトを提案してください。
-# 生成する文字はプロンプトの文字だけでお願いします。 英語で140文字以下にしてください
-# """
 
     prompt = f"""
-    以下の文字起こしとキャプションは同一音声から作られたものです。sunoでBGMを作成するためのテキストプロンプトを作ってください。
+    以下の文字起こしとキャプションは同一音声から作られたものです。text-to-audioの"facebook/musicgen-small"でBGMを作成するためのテキストプロンプトを作ってください。
     文字起こし内容:
     「{stt_data}」
 
@@ -41,18 +37,21 @@ def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminanc
     「{caption}」
 
     BGMを流す部屋の環境:
+    - 日時:{datetime_info}
+    - 天気:{wheather_imformation}
     - 温度:{temperature}℃
     - 湿度:{humidity}%
     - 気圧:{pressure}hPa
     - 照度:{illuminance}lx
 
-    上記から、音楽の雰囲気、テンポ、楽器、ジャンルを具体的に想像して、Sunoで使えるBGMプロンプトを提案してください。
+    上記から、音楽の雰囲気、テンポ、楽器、ジャンルを具体的に想像して、text-to-audioの"facebook/musicgen-small"というモデルで使えるBGMプロンプトを提案してください。
     照度は特にBGMを流す空間のムードを反映するので重視してください。
     明るい場所では明るいBGM、暗い場所では暗いBGMにするようにしてください。
     最も自然なジャンルを jazz, rock, classical, pop, hiphop, reggae, blues, metal から選んで入れてください。
-    出力はプロンプト文のみ、英語で140文字以内にしてください。
+    出力はプロンプト文のみ、英語で150文字以内にしてください。
     """
-
+    print("prompt",prompt)
+    exit()
     response = client.chat.completions.create(
         model=model,
         messages=[{"role": "user", "content": prompt}],
