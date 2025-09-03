@@ -670,8 +670,8 @@ if __name__ == "__main__":
     os.makedirs(args.out_dir, exist_ok=True)
     ts = _dt.datetime.now().strftime("%Y%m%d-%H%M%S")
     print(f"[DEBUG] Start dump -> {args.out_dir}  ({ts})")
-    print("paths", paths)
-    exit()
+    # print("paths", paths)
+    # exit()
     for path in paths:
         print(f"[INFO] Processing: {path}")
         events = detect_and_slice(

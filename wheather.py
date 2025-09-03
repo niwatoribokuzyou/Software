@@ -33,9 +33,7 @@ def get_weather_by_location(target_datetime=None):
     # 日時を指定されていれば文字列にして付加
     if target_datetime is None:
         target_datetime = datetime.now()
-        print("target_datetime", target_datetime)
     datetime_str = target_datetime.strftime("%Y-%m-%d %H:%M:%S")
-    print("datetime_str", datetime_str)
 
     return f"{weather_desc}"
 

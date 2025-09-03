@@ -7,7 +7,7 @@ import json
 SERVER_URL = "http://localhost:8000/api/v1/data"
 
 # 送信するMP3ファイル
-MP3_FILE_PATH = "voice_chunk_2.mp3"
+MP3_FILE_PATH = "./voice_chunk_2.mp3"
 
 # 環境データの例
 env_data = {

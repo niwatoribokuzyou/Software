@@ -1,34 +1,31 @@
+# README
 
+これは、音声と環境データを受信し、音楽を生成し、ステータスを確認して生成された音楽を取得するためのエンドポイントを提供するFastAPIアプリケーションです。
+
+## セットアップ
+
+アプリケーション実行までのセットアップ手順です。  
+以下の実行は、**リポジトリ直下**で行うことを前提とします。
+
+## インストール
+
+1. リポジトリをクローンします。
+2. pipを使用して必要なPythonパッケージをインストールします。
+3. .envファイルを作成
+4. ローカルモデルのインストールは初回実行時に自動的に行われます。
+
+依存関係をインストール
+```bash
 pip install -r requirements.txt
-version.docxにpip listしたやつのっけてる
+```
+.env
+```env
+OPEN_AI_APIKEY = ここにAPI KEY
+```
 
-文字起こし・キャプションBGMプロンプト作成一気にやりたい時
+## アプリケーションの実行
 
-python promptmade.py
-
-文字起こし 
-
-python whisper_test.py
-
-キャプション 
-
-python effb2_test.py
-
-LLM 
-
-python ollama_test.py
-
-
-sunoAPIとgptはまだうごかない
-
-
-実装済みの他の生成AIは議事録の一番下に書いてあるからほしかったら言って
-
-# FastAPI Server
-
-## 起動方法
-
-以下のコマンドでFastAPIサーバーを起動します。
+uvicornを使用してアプリケーションを実行できます。
 
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 8000
@@ -38,7 +35,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 ### `/api/v1/data` (POST)
 
-音声データと環境データを受け取り、音楽生成タスクを開始します。
+音声と環境データを受信し、音楽生成プロセスを開始します。
 
 **リクエストボディ**
 
@@ -46,7 +43,10 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 {
   "audio_data": "string (base64 encoded)",
   "environmental_data": {
-    "key": "value"
+    "temperature": "float",
+    "pressure": "float",
+    "humidity": "float",
+    "lux": "float"
   }
 }
 ```
@@ -55,16 +55,14 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 ```json
 {
-  "message": "Data received and processing started.",
+  "message": "データを受信し、処理を開始しました。",
   "task_id": "string (uuid)"
 }
 ```
 
-
-
 ### `/api/v1/status/{task_id}` (GET)
 
-指定された`task_id`の音楽生成タスクの状況を返します。
+音楽生成タスクのステータスを返します。
 
 **パスパラメータ**
 
@@ -72,16 +70,53 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 **レスポンス**
 
-*   **処理中の場合:**
+*   **処理中:**
     ```json
     {
       "status": "processing"
     }
     ```
-*   **完了した場合:**
+*   **完了:**
     ```json
     {
       "status": "completed",
-      "result": "string"
+      "result": "string (base64 encoded audio)",
+      "min_color": "string (#RRGGBB)",
+      "max_color": "string (#RRGGBB)",
+      "bpm": "float"
     }
     ```
+
+### `/api/v1/task_list` (GET)
+
+複数のタスクのステータスを確認します。少なくとも1つのタスクが完了している場合は`true`を、それ以外の場合は`false`を返します。
+
+**クエリパラメータ**
+
+*   `task_ids`: `list[str]` - 確認するタスクIDのリスト。
+
+**レスポンス**
+
+```json
+true
+```
+または
+```json
+false
+```
+
+### `/api/v1/get_mock_data` (GET)
+
+テスト目的で、事前に生成されたモックオーディオファイルを返します。
+
+**レスポンス**
+
+```json
+{
+  "status": "completed",
+  "result": "string (base64 encoded audio)",
+  "min_color": "#EC0101F8",
+  "max_color": "#D3E0E9",
+  "bpm": 120
+}
+```

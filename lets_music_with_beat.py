@@ -180,8 +180,8 @@ def np_float32_to_audiosegment(
 
 
 if __name__ == "__main__":
-    music = "output-ribingu.mp3"
-    env = "voice.mp3"
+    music = "output_66.mp3"
+    env = "./voice_chunk_2.mp3"
     with open(music, "rb") as f:
         music_data = f.read()
     with open(env, "rb") as f:

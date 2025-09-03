@@ -181,12 +181,20 @@ def chat_with_gpt(stt_data, caption, temperature, humidity, pressure, illuminanc
     出力はプロンプト文のみ、英語で150文字以内にしてください。
     """
     print("prompt::::::",prompt)
+# a large motor vehicle engine is running and adult males are speaking in the background
+# おかえいまーすおかえいまーすおー忘れてきてるおかえいまーすおかえいまーす今日は今日買いを買いに行くどういうの?行きたい買ったいilkおかえいまーすしんわかだったひわりやっきばですいっきり大丈夫ぜ小さい Infusionに入っていてるうううなるほど男ピヨ
+# people are talking and laughing
+# can
+# a crowd of people are talking and laughing
+    # 特別な日付（例: クリスマス、ハロウィン、バレンタインなど）に該当する場合は、
+    # そのイベントにふさわしい雰囲気や楽器（ベル、オルゴール、ゴシックな音色など）を反映してください。
     response = client.chat.completions.create(
         model=model,
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
         max_tokens=200
     )
+
     return response.choices[0].message.content
 
 
@@ -204,13 +212,13 @@ if __name__ == "__main__":
 
     scenarios = [
         # 夏
-        {"season": "夏", "datetime_info": "2025-08-01 07:00 朝", "temperature": 26.5, "humidity": 50, "illuminance": 300, "weather": "雨"},
-        {"season": "夏", "datetime_info": "2025-08-01 13:00 昼", "temperature": 26.5, "humidity": 50, "illuminance": 500, "weather": "雨"},
-        {"season": "夏", "datetime_info": "2025-08-01 22:00 夜", "temperature": 26.5, "humidity": 50, "illuminance": 10, "weather": "雨"},
+        # {"season": "夏", "datetime_info": "2025-08-01 07:00 朝", "temperature": 26.5, "humidity": 50, "illuminance": 300, "weather": "晴れ"},
+        # {"season": "夏", "datetime_info": "2025-08-01 13:00 昼", "temperature": 26.5, "humidity": 50, "illuminance": 500, "weather": "晴れ"},
+        # {"season": "夏", "datetime_info": "2025-08-01 22:00 夜", "temperature": 26.5, "humidity": 50, "illuminance": 10, "weather": "晴れ"},
         # 冬
-        {"season": "冬", "datetime_info": "2025-12-01 07:00 朝", "temperature": 22, "humidity": 35, "illuminance": 200, "weather": "雨"},
-        {"season": "冬", "datetime_info": "2025-12-01 13:00 昼", "temperature": 22, "humidity": 35, "illuminance": 500, "weather": "雨"},
-        {"season": "冬", "datetime_info": "2025-12-01 22:00 夜", "temperature": 22, "humidity": 35, "illuminance": 10, "weather": "雨"},
+        # {"season": "冬", "datetime_info": "2025-12-01 07:00 朝", "temperature": 22, "humidity": 35, "illuminance": 200, "weather": "晴れ"},
+        # {"season": "冬", "datetime_info": "2025-12-01 13:00 昼", "temperature": 22, "humidity": 35, "illuminance": 500, "weather": "晴れ"},
+        {"season": "冬", "datetime_info": "2025-12-01 22:00 夜", "temperature": 22, "humidity": 35, "illuminance": 10, "weather": "晴れ"},
     ]
 
     for i, sc in enumerate(scenarios):
@@ -225,6 +233,7 @@ if __name__ == "__main__":
             sc["datetime_info"],
             sc["weather"]
         )
-        generates(prompt_text, i)
         print(prompt_text, i)
+        exit()
+        generates(prompt_text, i)
         print("\n")

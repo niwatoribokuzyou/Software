@@ -84,7 +84,6 @@ async def get_task_status_list(task_ids: List[str] = Query(...)):
 	"""
 	指定されたtask_idの処理状況を返す
 	"""
-	print("aaaaaaaaaaaaaaaaaaaaaaaaaa")
 	for task_id in task_ids:
 		if task_id not in task_status_db:
 			raise HTTPException(status_code=404, detail="Task ID not found")
@@ -103,29 +102,6 @@ async def get_task_status_list(task_ids: List[str] = Query(...)):
 	return False
 
 
-# @app.post("/api/v1/task_list")
-# # async def get_task_status(task_ids: list[str]):
-# async def get_task_status_list(task_ids: list[str] = Body(...)):
-# 	"""
-# 	指定されたtask_idの処理状況を返す
-# 	"""
-# 	print("aaaaaaaaaaaaaaaaaaaaaaaaaa")
-# 	for task_id in task_ids:
-# 		if task_id not in task_status_db:
-# 			raise HTTPException(status_code=404, detail="Task ID not found")
-# 		try:
-# 			task = task_status_db.get(task_id)
-# 			if task and task.get("status") == "completed":
-# 				return True
-# 			else:
-# 				print("だめ")
-# 				continue
-# 		except Exception as e:
-#         	# 例外が起きた場合、HTTP 500で詳細メッセージを返す
-# 			raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
-	
-
-# 	return False
 
 @app.get("/api/v1/status/{task_id}")
 async def get_task_status(task_id: str):
@@ -137,9 +113,7 @@ async def get_task_status(task_id: str):
 		raise HTTPException(status_code=404, detail="Task ID not found")
 
 	task = task_status_db[task_id]
-	print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
-	print("task",task)
 	if task["status"] == "completed":
 		return {"status": "completed", "result": task["result"], "min_color": task["min_color"], "max_color": task["max_color"], "bpm": task["bpm"]}
 		# return {"status": "completed", "min_color": task["min_color"], "max_color": task["max_color"], "bpm": task["bpm"]}
@@ -160,7 +134,7 @@ async def get_mock_data():
 	Error Cases:
 		- If the audio file does not exist or cannot be read, an HTTP 500 error may be returned.
 	"""
-	sound_path = "output-f.mp3"
+	sound_path = "./作業中.mp3"
 	try:
 		with open(sound_path, "rb") as f:
 			binary_mp3 = f.read()

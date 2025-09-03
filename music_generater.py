@@ -11,17 +11,12 @@ from generate import generates
 from lets_music_with_beat import blend_soundscape_music
 def generate_music(prompt, kankyouonn):
     
-    
-    # sunoの処理をここに書く
-    # music = suno(prompt)
-
+ 
     #たぶん
     music, sr = generates(prompt)
 
     combine_music, bpm = blend_soundscape_music(music, kankyouonn)
-    # buffer = io.BytesIO()
-#     sf.write(buffer, music, sr, format='WAV')
-#     buffer.seek(0)
+    
 # # バイト列を base64 に変換
     encoded_audio = base64.b64encode(combine_music).decode("utf-8")
     return encoded_audio, bpm

@@ -138,7 +138,7 @@ def generates(prompt, i):
     return buffer_mp3.read(), samplerate
 
 if __name__ == "__main__":
-    prompt = "A dark, ambient electronic piece with slow tempo, featuring synthesizers and soft beeping sounds, reflecting the dim 10lx room. Genre: ambient electronic with a touch of jazz."
+    prompt = "A light and cheerful pop melody with a gentle tempo, featuring acoustic guitar and soft piano, ideal for a bright midday gathering with people talking and laughing."
 
-    music = generates(prompt)
+    music = generates(prompt, 66)
     # print("music", music)
