@@ -21,6 +21,7 @@ pip install -r requirements.txt
 .env
 ```env
 OPEN_AI_APIKEY = ここにAPI KEY
+WEATHER_APIKEY = ここにAPI KEY
 ```
 
 ## アプリケーションの実行
